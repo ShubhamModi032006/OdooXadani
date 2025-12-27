@@ -204,11 +204,13 @@ import { Plus, Edit2, Trash2, Mail, Phone } from 'lucide-react';
 import Badge from '../../components/ui/Badge';
 import { useSidebar } from '../../context/SidebarContext';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { teamsAPI } from '../../api/teams.api';
 
 const TeamPage = () => {
   const { isSidebarOpen } = useSidebar();
   const { user } = useAuth();
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [teams, setTeams] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -270,9 +272,10 @@ const TeamPage = () => {
           {canEdit && (
             <Link
               to="/teams/create"
+              style={{ backgroundColor: theme.primary }}
               className="flex items-center gap-2 px-4 py-2
-              bg-orange-600 text-white rounded-lg
-              hover:bg-orange-700 transition font-medium"
+              text-white rounded-lg
+              hover:opacity-90 transition font-medium"
             >
               <Plus size={20} />
               Add Team
@@ -286,7 +289,7 @@ const TeamPage = () => {
             <p className="text-sm font-medium text-slate-600 mb-1">
               Total Members
             </p>
-            <p className="text-3xl font-bold text-orange-600">
+            <p style={{ color: theme.primary }} className="text-3xl font-bold">
               {teams.length}
             </p>
           </div>
@@ -304,7 +307,7 @@ const TeamPage = () => {
             <p className="text-sm font-medium text-slate-600 mb-1">
               Active Teams
             </p>
-            <p className="text-3xl font-bold text-orange-600">
+            <p style={{ color: theme.primary }} className="text-3xl font-bold">
               {teams.filter(t => t.status !== 'inactive').length}
             </p>
           </div>
@@ -384,31 +387,37 @@ const TeamPage = () => {
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex flex-col gap-1">
-                        {member.email && (
-                          <a
-                            href={`mailto:${member.email}`}
-                            className="text-orange-600 hover:underline flex items-center gap-1"
-                          >
-                            <Mail size={14} />
-                            {member.email}
-                          </a>
-                        )}
-                        {member.phone && (
-                          <a
-                            href={`tel:${member.phone}`}
-                            className="text-orange-600 hover:underline flex items-center gap-1"
-                          >
-                            <Phone size={14} />
-                            {member.phone}
-                          </a>
-                        )}
-                        {!member.email && !member.phone && <span className="text-slate-500">N/A</span>}
+                        <a
+                          href={`mailto:${member.email}`}
+                          style={{ color: theme.primary }}
+                          className="hover:underline flex items-center gap-1"
+                        >
+                          <Mail size={14} />
+                          {member.email}
+                        </a>
+                        <a
+                          href={`tel:${member.phone}`}
+                          style={{ color: theme.primary }}
+                          className="hover:underline flex items-center gap-1"
+                        >
+                          <Phone size={14} />
+                          {member.phone}
+                        </a>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         {canEdit && (
                           <>
+                            <button
+                              style={{
+                                color: theme.primary,
+                                backgroundColor: theme.light,
+                              }}
+                              className="p-2 rounded-lg transition"
+                            >
+                              <Edit2 size={16} />
+                            </button>
                             <button
                               onClick={async () => {
                                 if (window.confirm('Remove this member from the team?')) {

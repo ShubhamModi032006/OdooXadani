@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus } from 'lucide-react';
 import { useSidebar } from '../../context/SidebarContext';
+
 import { equipmentAPI } from '../../api/equipment.api';
 import { teamsAPI } from '../../api/teams.api';
+import { useTheme } from '../../context/ThemeContext';
 
 const AddEquipment = () => {
   const { isSidebarOpen } = useSidebar();
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [teams, setTeams] = useState([]);
   const [technicians, setTechnicians] = useState([]);
@@ -340,8 +343,9 @@ const AddEquipment = () => {
                     name="isScrapped"
                     checked={formData.isScrapped}
                     onChange={handleChange}
-                    className="w-4 h-4 rounded border-slate-300 text-orange-600
-                    focus:ring-2 focus:ring-orange-500"
+                    style={{ accentColor: theme.primary }}
+                    className="w-4 h-4 rounded border-slate-300
+                    focus:ring-2 focus:ring-offset-0 outline-none"
                   />
                   <span className="text-slate-700 font-medium">
                     Mark as Scrapped
@@ -356,9 +360,10 @@ const AddEquipment = () => {
               <div className="flex gap-4 pt-6">
                 <button
                   type="submit"
+                  style={{ backgroundColor: theme.primary }}
                   className="flex items-center gap-2 px-6 py-3
-                  bg-orange-600 text-white rounded-lg
-                  hover:bg-orange-700 transition-colors font-medium"
+                  text-white rounded-lg
+                  hover:opacity-90 transition-colors font-medium"
                 >
                   <Plus size={20} />
                   Create Equipment

@@ -195,11 +195,14 @@ import { Plus, Search, Edit2, Trash2, Eye } from 'lucide-react';
 import Badge from '../../components/ui/Badge';
 import { useSidebar } from '../../context/SidebarContext';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { equipmentAPI } from '../../api/equipment.api';
+
 
 const EquipmentList = () => {
   const { isSidebarOpen } = useSidebar();
   const { user } = useAuth();
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [equipment, setEquipment] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -252,9 +255,10 @@ const EquipmentList = () => {
           {canEdit && (
             <Link
               to="/equipment/create"
+              style={{ backgroundColor: theme.primary }}
               className="flex items-center gap-2 px-4 py-2
-              bg-orange-600 text-white rounded-lg
-              hover:bg-orange-700 transition-colors font-medium"
+              text-white rounded-lg
+              hover:opacity-90 transition-colors font-medium"
             >
               <Plus size={20} />
               Add Equipment
@@ -345,31 +349,32 @@ const EquipmentList = () => {
                             <Eye size={16} />
                           </Link>
 
-                          {canEdit && (
-                            <>
-                              {/* Edit */}
-                              <button
-                                className="p-2 rounded-lg
-                                text-orange-600 hover:bg-orange-50
-                                transition-colors"
-                                title="Edit"
-                              >
-                                <Edit2 size={16} />
-                              </button>
+    {isAdmin && (
+      <>
+        {/* Edit */}
+        <button
+          style={{ color: theme.primary }}
+          className="p-2 rounded-lg
+          hover:opacity-70
+          transition-colors"
+          title="Edit"
+        >
+          <Edit2 size={16} />
+        </button>
 
-                              {/* Scrap */}
-                              <button
-                                onClick={async () => {
-                                  if (window.confirm('Are you sure you want to scrap this equipment?')) {
-                                    try {
-                                      await equipmentAPI.scrap(eq._id || eq.id);
-                                      setEquipment(equipment.filter(e => (e._id || e.id) !== (eq._id || eq.id)));
-                                    } catch (error) {
-                                      console.error('Error scrapping equipment:', error);
-                                      alert('Failed to scrap equipment');
-                                    }
-                                  }
-                                }}
+        {/* Scrap */}
+        <button
+          onClick={async () => {
+            if (window.confirm('Are you sure you want to scrap this equipment?')) {
+              try {
+                await equipmentAPI.scrap(eq._id || eq.id);
+                setEquipment(equipment.filter(e => (e._id || e.id) !== (eq._id || eq.id)));
+              } catch (error) {
+                console.error('Error scrapping equipment:', error);
+                alert('Failed to scrap equipment');
+              }
+            }
+          }}
                                 className="p-2 rounded-lg
                                 text-red-600 hover:bg-red-50
                                 transition-colors"

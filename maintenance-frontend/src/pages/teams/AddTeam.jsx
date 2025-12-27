@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, X } from 'lucide-react';
 import { useSidebar } from '../../context/SidebarContext';
+import { useTheme } from '../../context/ThemeContext';
 import { teamsAPI } from '../../api/teams.api';
 
 const AddTeam = () => {
   const { isSidebarOpen } = useSidebar();
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [availableUsers, setAvailableUsers] = useState([]);
 
@@ -236,7 +238,11 @@ const AddTeam = () => {
                       {formData.members.map((member) => (
                         <div
                           key={member._id || member.id}
-                          className="flex items-center justify-between p-4 bg-orange-50 border border-orange-200 rounded-lg"
+                          style={{
+                            backgroundColor: theme.light,
+                            borderColor: theme.primary,
+                          }}
+                          className="flex items-center justify-between p-4 border rounded-lg"
                         >
                           <div>
                             <div className="font-medium text-slate-900">{member.name || 'N/A'}</div>
@@ -245,7 +251,10 @@ const AddTeam = () => {
                           <button
                             type="button"
                             onClick={() => removeMember(member._id || member.id)}
-                            className="p-1 hover:bg-orange-200 rounded-lg text-orange-600 transition-colors"
+                            style={{
+                              color: theme.primary,
+                            }}
+                            className="p-1 hover:opacity-70 rounded-lg transition-colors"
                             title="Remove member"
                           >
                             <X size={18} />
@@ -268,9 +277,10 @@ const AddTeam = () => {
               <div className="flex gap-4 pt-6">
                 <button
                   type="submit"
+                  style={{ backgroundColor: theme.primary }}
                   className="flex items-center gap-2 px-6 py-3
-                  bg-orange-600 text-white rounded-lg
-                  hover:bg-orange-700 transition-colors font-medium"
+                  text-white rounded-lg
+                  hover:opacity-90 transition-colors font-medium"
                 >
                   <Plus size={20} />
                   Create Team
